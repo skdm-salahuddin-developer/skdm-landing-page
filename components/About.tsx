@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowRight, Award, CheckCircle2, Sparkles } from 'lucide-react';
+import { Award, CheckCircle2, Sparkles } from 'lucide-react';
 
 export default function About() {
   return (
@@ -100,6 +100,11 @@ export default function About() {
           {/* ========================================================= */}
           <div className="lg:col-span-6 flex flex-col items-start text-left">
             
+            {/* Simple Subtitle / Eyebrow Text (Real-World Style, No Capsule, No Slug in UI) */}
+            <span className="text-orange-500 font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
+              Digital Marketing Agency in Andheri
+            </span>
+
             {/* Heading with Hand-Drawn Orange Wave Accent */}
             <div className="mb-6">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900">
@@ -140,16 +145,20 @@ export default function About() {
               </div>
             </div>
 
-            {/* "Know More" Pill Button with Orange Icon Badge */}
+            {/* "Know More" Pill Button with Logo1 */}
             <a
-              href="#know-more"
+              href="#contact"
               id="about-know-more-btn"
-              className="inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full border border-slate-700 hover:border-orange-500 text-slate-900 font-semibold text-sm sm:text-base hover:text-orange-600 transition-all duration-200 group shadow-2xs"
+              className="inline-flex items-center gap-3 pl-6 pr-4 py-2.5 rounded-full border border-slate-700 hover:border-orange-500 text-slate-900 font-semibold text-sm sm:text-base hover:text-orange-600 transition-all duration-200 group shadow-2xs"
             >
               <span>Know More</span>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                <ArrowRight className="w-4 h-4" />
-              </div>
+              <Image
+                src="/logo1.png"
+                alt="SKDM Logo"
+                width={44}
+                height={44}
+                className="w-9 h-9 sm:w-10 sm:h-10 object-contain group-hover:scale-115 group-hover:rotate-6 transition-transform duration-300"
+              />
             </a>
 
           </div>

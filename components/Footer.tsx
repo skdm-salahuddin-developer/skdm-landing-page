@@ -27,12 +27,13 @@ export default function Footer() {
 
   const legalLinks = [
     { label: 'About Us', href: '#about' },
-    { label: 'Our Team', href: '#about' },
+    { label: 'Services', href: '#services' },
+    { label: 'Process', href: '#process' },
+    { label: 'Why Choose Us', href: '#why-choose-us' },
+    { label: 'Industries', href: '#industries' },
+    { label: 'FAQ', href: '#faq' },
     { label: 'Privacy Policy', href: '#' },
     { label: 'Terms & Conditions', href: '#' },
-    { label: 'Consent Form', href: '#' },
-    { label: 'Careers', href: '#' },
-    { label: 'Blogs', href: '#' },
     { label: 'Contact Us', href: '#contact' },
   ];
 
@@ -52,14 +53,14 @@ export default function Footer() {
           
           {/* Column 1: Agency Brand & About (5 cols) */}
           <div className="lg:col-span-4 flex flex-col">
-            <div className="mb-6">
-              <div className="inline-block bg-white p-2.5 rounded-2xl shadow-md border border-slate-700">
+            <div className="mb-5">
+              <div className="inline-block bg-white px-4 py-2.5 rounded-2xl shadow-md border border-slate-700">
                 <Image
                   src="/logo-C6brZTHT.png"
                   alt="Shree Krishna Digital Marketing Solutions"
-                  width={210}
-                  height={56}
-                  className="h-12 w-auto object-contain"
+                  width={320}
+                  height={96}
+                  className="h-20 sm:h-24 w-auto object-contain"
                 />
               </div>
             </div>
@@ -151,7 +152,7 @@ export default function Footer() {
             <div className="mt-7 flex items-center gap-3">
               {/* Facebook */}
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/shree.krishnadigitalsolutions/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Facebook"
@@ -164,7 +165,7 @@ export default function Footer() {
 
               {/* LinkedIn */}
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/shree-krishna-digital-marketing/?originalSubdomain=in"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
@@ -177,7 +178,7 @@ export default function Footer() {
 
               {/* Instagram */}
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/shreekrishna_digitalsolutions/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
@@ -190,7 +191,7 @@ export default function Footer() {
 
               {/* WhatsApp */}
               <a
-                href="https://wa.me/917021390953"
+                href="https://api.whatsapp.com/send/?phone=%2B917021390953&text=Hello%2C%20I%27m%20interested%20in%20your%20digital%20marketing%20services.%20Please%20share%20more%20details%20about%20how%20you%20can%20help%20grow%20my%20business%20online.&type=phone_number&app_absent=0"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="WhatsApp"

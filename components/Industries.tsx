@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
 
@@ -21,11 +21,32 @@ const industries: IndustryItem[] = [
     tag: 'Clinics & Hospitals',
   },
   {
+    id: 'real-estate',
+    name: 'Real Estate',
+    image: '/industry-real-estate.jpg',
+    description: 'High-intent buyer lead generation, localized Google 3-Pack rankings, and 3D walkthrough marketing for premier developers.',
+    tag: 'Luxury Towers & Commercial',
+  },
+  {
     id: 'education',
     name: 'Education',
     image: '/industry-education.jpg',
     description: 'Scaling student admissions and course enrollments through high-converting omnichannel lead funnels.',
     tag: 'Institutes & EdTech',
+  },
+  {
+    id: 'lifestyle',
+    name: 'Lifestyle & Fashion',
+    image: '/industry-lifestyle.jpg',
+    description: 'Elevating fashion labels and lifestyle collections with viral social creatives, influencer funnels, and e-commerce ROAS.',
+    tag: 'Apparel & Luxury Retail',
+  },
+  {
+    id: 'spa-salon',
+    name: 'Spa & Salon',
+    image: '/industry-spa-salon.jpg',
+    description: 'Filling appointment calendars with localized Meta ad campaigns, Google Maps booking funnels, and aesthetic reels.',
+    tag: 'Wellness & Aesthetics',
   },
   {
     id: 'resorts',
@@ -44,7 +65,47 @@ const industries: IndustryItem[] = [
 ];
 
 export default function Industries() {
-  const [hoveredId, setHoveredId] = useState<string | null>('resorts');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+
+  // Responsive itemsPerPage detection
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setItemsPerPage(1);
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(4);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const maxIndex = Math.max(0, industries.length - itemsPerPage);
+
+  // Auto-slide right-to-left every 2.5 seconds (2500ms)
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, [isPaused, maxIndex]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  };
 
   return (
     <section id="industries" className="relative w-full py-16 sm:py-24 bg-white overflow-hidden border-t border-slate-100">
@@ -83,97 +144,106 @@ export default function Industries() {
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed max-w-2xl">
-            We provide a comprehensive range of solutions designed to address your unique business challenges and drive meaningful growth.
+            Tailored digital growth architectures designed for high-ticket service verticals across Mumbai and global markets.
           </p>
 
         </div>
 
-        {/* Carousel / Cards Grid Container with Left & Right Arrow Accents */}
-        <div className="relative w-full">
+        {/* Carousel Container with Left & Right Arrow Accents */}
+        <div 
+          className="relative w-full"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           
           {/* Left Arrow Button */}
           <button 
+            onClick={handlePrev}
             aria-label="Previous industry"
-            className="hidden lg:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-orange-500 hover:bg-orange-600 text-white items-center justify-center shadow-lg transition-transform hover:scale-110"
+            className="hidden sm:flex absolute -left-4 lg:-left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-orange-500 hover:bg-orange-600 active:scale-95 text-white items-center justify-center shadow-lg transition-all hover:scale-110"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
 
           {/* Right Arrow Button */}
           <button 
+            onClick={handleNext}
             aria-label="Next industry"
-            className="hidden lg:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-orange-500 hover:bg-orange-600 text-white items-center justify-center shadow-lg transition-transform hover:scale-110"
+            className="hidden sm:flex absolute -right-4 lg:-right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-orange-500 hover:bg-orange-600 active:scale-95 text-white items-center justify-center shadow-lg transition-all hover:scale-110"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* 4 Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            
-            {industries.map((item) => {
-              const isHovered = hoveredId === item.id;
-              return (
+          {/* Sliding Track Viewport */}
+          <div className="overflow-hidden py-3">
+            <div 
+              className="flex transition-transform duration-700 ease-in-out gap-5 sm:gap-6"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
+              }}
+            >
+              {industries.map((item) => (
                 <div
                   key={item.id}
-                  onMouseEnter={() => setHoveredId(item.id)}
-                  onMouseLeave={() => setHoveredId(item.id)}
-                  className="group relative h-[360px] sm:h-[400px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200/90 transition-all duration-300 hover:shadow-2xl cursor-pointer"
+                  style={{
+                    flex: `0 0 calc(${100 / itemsPerPage}% - ${(itemsPerPage - 1) * (itemsPerPage === 1 ? 0 : 24 / itemsPerPage)}px)`,
+                  }}
+                  className="group relative h-[380px] sm:h-[420px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-md border border-slate-200/90 hover:border-orange-500 hover:-translate-y-2 hover:shadow-[0_20px_45px_-12px_rgba(249,115,22,0.35)] transition-all duration-500 ease-out cursor-pointer"
                 >
-                  {/* Background Image */}
+                  {/* Clean Background Image with Smooth Parallax Zoom */}
                   <Image
                     src={item.image}
                     alt={item.name}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-112 group-hover:rotate-1"
                   />
 
-                  {/* Gradient Overlay */}
-                  <div
-                    className={`absolute inset-0 transition-opacity duration-300 ${
-                      isHovered
-                        ? 'bg-gradient-to-t from-black/95 via-black/75 to-black/40 opacity-100'
-                        : 'bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-90'
-                    }`}
-                  />
+                  {/* Clean Daylight Gradient for Crisp Text Legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/35 to-transparent transition-opacity duration-300" />
 
-                  {/* Active Red Dot Indicator on Top Right (as seen in screenshot) */}
-                  {isHovered && (
-                    <div className="absolute top-5 right-5 z-20">
-                      <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 shadow-md shadow-red-500/80"></span>
-                      </span>
-                    </div>
-                  )}
+                  {/* Ambient Golden-Orange Sheen on Hover */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/20 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                  {/* Content Container (Pinned to Bottom) */}
-                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 z-10 flex flex-col items-center text-center transition-all duration-300">
+                  {/* Content Container (Pinned to Bottom with Smooth Upward Shift) */}
+                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 z-10 flex flex-col items-start text-left group-hover:-translate-y-1 transition-transform duration-300 ease-out">
                     
                     {/* Industry Title */}
-                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2 group-hover:text-orange-400 transition-colors">
-                      {item.name}
-                    </h3>
-
-                    {/* 2-Line Description (Visible on Hover / Active) */}
-                    <div
-                      className={`overflow-hidden transition-all duration-300 ${
-                        isHovered
-                          ? 'max-h-24 opacity-100 mt-1'
-                          : 'max-h-0 sm:max-h-0 opacity-0'
-                      }`}
-                    >
-                      <p className="text-xs sm:text-sm text-slate-200 leading-snug line-clamp-2 font-normal">
-                        {item.description}
-                      </p>
+                    <div className="flex items-center justify-between w-full mb-1.5">
+                      <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight group-hover:text-orange-400 group-hover:translate-x-1 transition-all duration-300">
+                        {item.name}
+                      </h3>
+                      <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white group-hover:bg-orange-500 group-hover:scale-115 group-hover:rotate-45 transition-all duration-300 shrink-0 shadow-sm">
+                        <ArrowUpRight className="w-4 h-4" />
+                      </div>
                     </div>
+
+                    {/* 2-Line Description with Clear Typography */}
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed line-clamp-2 font-normal mt-1 group-hover:text-white transition-colors duration-300">
+                      {item.description}
+                    </p>
 
                   </div>
 
                 </div>
-              );
-            })}
+              ))}
+            </div>
+          </div>
 
+          {/* Dots Indicator Progress Bar */}
+          <div className="flex items-center justify-center gap-2 mt-8">
+            {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`transition-all duration-300 rounded-full ${
+                  currentIndex === idx
+                    ? 'w-8 h-2.5 bg-orange-500 shadow-xs'
+                    : 'w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400'
+                }`}
+              />
+            ))}
           </div>
 
         </div>

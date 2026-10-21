@@ -33,10 +33,10 @@ const testimonials: Testimonial[] = [
 
 export default function Testimonials() {
   return (
-    <section className="relative w-full overflow-hidden">
+    <section className="relative w-full overflow-hidden bg-white">
       
       {/* Top Dark Background Split */}
-      <div className="bg-[#0e0c18] pt-16 sm:pt-20 pb-36 sm:pb-44 px-4 sm:px-6 lg:px-8 relative">
+      <div className="bg-[#0e0c18] pt-16 sm:pt-20 pb-32 sm:pb-40 px-4 sm:px-6 lg:px-8 relative">
         
         {/* Top-left decorative brush/ribbon accent (as seen in screenshot) */}
         <div className="absolute top-6 left-6 pointer-events-none opacity-80">
@@ -80,7 +80,7 @@ export default function Testimonials() {
       </div>
 
       {/* Cards Overlap Section (Shifted up with negative margin into dark split) */}
-      <div className="bg-white -mt-28 sm:-mt-32 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 relative z-20">
+      <div className="-mt-20 sm:-mt-24 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="max-w-7xl mx-auto relative">
           
           {/* Left Arrow Button */}

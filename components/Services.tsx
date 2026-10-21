@@ -1,15 +1,64 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface ServiceItem {
   id: string;
   name: string;
   description: string;
   image: string;
-  metrics: string;
+}
+
+function AnimatedCount({ 
+  target, 
+  suffix = '', 
+  duration = 2000 
+}: { 
+  target: number; 
+  suffix?: string; 
+  duration?: number;
+}) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const animatedRef = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !animatedRef.current) {
+          animatedRef.current = true;
+          const startTime = performance.now();
+          const step = (currentTime: number) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Cubic ease out
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.floor(easeProgress * target));
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              setCount(target);
+            }
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target, duration]);
+
+  return (
+    <span ref={ref}>
+      {count.toLocaleString()}{suffix}
+    </span>
+  );
 }
 
 const servicesData: ServiceItem[] = [
@@ -18,42 +67,36 @@ const servicesData: ServiceItem[] = [
     name: 'SEO Optimization',
     description: 'Data-driven search engine optimization and Google Local 3-Pack authority that drives consistent organic traffic and qualified inbound calls.',
     image: '/service-seo.jpg',
-    metrics: '+210% Organic Traffic Growth',
   },
   {
     id: 'web',
     name: 'Website Development',
     description: 'Custom, lightning-fast mobile-responsive websites engineered with modern architectures for maximum speed, security, and conversion.',
     image: '/service-web.jpg',
-    metrics: '99 Google Lighthouse Performance',
   },
   {
     id: 'app',
     name: 'App Development',
     description: 'Scalable iOS and Android mobile applications crafted with intuitive UI/UX and seamless cloud integrations to engage and retain your customers.',
     image: '/service-web.jpg',
-    metrics: 'Cross-Platform Native Speed',
   },
   {
     id: 'social',
     name: 'Social Media Marketing',
     description: 'Strategic content creation, community engagement, and high-impact social campaigns across Instagram, LinkedIn, and Meta that amplify brand authority.',
     image: '/service-seo.jpg',
-    metrics: '4.5x Social Engagement Lift',
   },
   {
     id: 'ppc',
     name: 'Pay Per Click',
     description: 'Precision-targeted Google Ads & Meta advertising funnels built to capture high-intent buyers with optimal cost-per-lead and verified ROAS.',
     image: '/service-seo.jpg',
-    metrics: '3.8x Average Campaign ROAS',
   },
   {
     id: 'pr',
     name: 'PR and Ads Marketing',
     description: 'Comprehensive digital PR distribution, media outreach, and omnichannel sponsored placements that elevate brand credibility on national outlets.',
     image: '/service-web.jpg',
-    metrics: 'Top Tier Publications & Reach',
   },
 ];
 
@@ -74,8 +117,8 @@ export default function Services() {
             
             {/* Stat 1 */}
             <div className="flex flex-col items-center">
-              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0e7490] tracking-tight">
-                6 +
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0e7490] tracking-tight tabular-nums">
+                <AnimatedCount target={6} suffix=" +" />
               </span>
               <span className="text-xs sm:text-sm font-semibold text-slate-700 mt-2">
                 Years Experience
@@ -84,8 +127,8 @@ export default function Services() {
 
             {/* Stat 2 */}
             <div className="flex flex-col items-center">
-              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0e7490] tracking-tight">
-                5,000 +
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0e7490] tracking-tight tabular-nums">
+                <AnimatedCount target={5000} suffix=" +" />
               </span>
               <span className="text-xs sm:text-sm font-semibold text-slate-700 mt-2">
                 Project Completed
@@ -94,8 +137,8 @@ export default function Services() {
 
             {/* Stat 3 */}
             <div className="flex flex-col items-center">
-              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0e7490] tracking-tight">
-                3,000 +
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0e7490] tracking-tight tabular-nums">
+                <AnimatedCount target={3000} suffix=" +" />
               </span>
               <span className="text-xs sm:text-sm font-semibold text-slate-700 mt-2">
                 Satisfied Clients
@@ -104,8 +147,8 @@ export default function Services() {
 
             {/* Stat 4 */}
             <div className="flex flex-col items-center">
-              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0e7490] tracking-tight">
-                10 Lakh+
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0e7490] tracking-tight tabular-nums">
+                <AnimatedCount target={10} suffix=" Lakh+" />
               </span>
               <span className="text-xs sm:text-sm font-semibold text-slate-700 mt-2">
                 Paid Leads Generated
@@ -126,42 +169,48 @@ export default function Services() {
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-orange-50/60 rounded-full blur-3xl pointer-events-none -z-10" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+          
+          {/* Section Header */}
+          <div className="max-w-2xl mb-10 sm:mb-14">
+            {/* Simple Eyebrow Text (Real-World Style, No Capsule, No Slug in UI) */}
+            <span className="text-orange-500 font-bold text-xs sm:text-sm uppercase tracking-wider mb-2 block">
+              Digital Marketing Experts in Andheri
+            </span>
+
+            <div className="mb-3">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                <span className="relative inline-block">
+                  The Services,
+                  {/* Hand-drawn smooth curved orange underline accent */}
+                  <svg
+                    className="absolute -bottom-1.5 left-0 w-full h-3 text-orange-500"
+                    viewBox="0 0 140 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2 10C24 4 48 4 70 8C92 12 116 12 138 6"
+                      stroke="currentColor"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>{' '}
+                <span className="text-slate-900">We Provide</span>
+              </h2>
+            </div>
+            <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
+              We provide a comprehensive range of solutions designed to address your unique business challenges and drive meaningful growth.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
             {/* ===================================================== */}
-            {/* LEFT COLUMN: Heading & Interactive Service Card       */}
+            {/* LEFT COLUMN: Interactive Service Card                 */}
             {/* ===================================================== */}
-            <div className="lg:col-span-6 flex flex-col items-start text-left z-10">
+            <div className="lg:col-span-6 flex flex-col items-start text-left z-10 w-full">
               
-              {/* Heading with Hand-Drawn Orange Wave Accent */}
-              <div className="mb-4">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                  <span className="relative inline-block">
-                    The Services,
-                    {/* Hand-drawn smooth curved orange underline accent */}
-                    <svg
-                      className="absolute -bottom-1.5 left-0 w-full h-3 text-orange-500"
-                      viewBox="0 0 140 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M2 10C24 4 48 4 70 8C92 12 116 12 138 6"
-                        stroke="currentColor"
-                        strokeWidth="3.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </span>{' '}
-                  <span className="text-slate-900">We Provide</span>
-                </h2>
-              </div>
-
-              {/* Subtitle */}
-              <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed max-w-xl mb-8">
-                We provide a comprehensive range of solutions designed to address your unique business challenges and drive meaningful growth.
-              </p>
-
               {/* Dynamic Service Visual Showcase Card */}
               <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl shadow-slate-200/70 bg-white group">
                 
@@ -169,7 +218,7 @@ export default function Services() {
                 <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full border-2 border-dashed border-amber-400/80 pointer-events-none z-20" />
 
                 {/* Service Visual Image */}
-                <div className="relative w-full h-[280px] sm:h-[350px]">
+                <div className="relative w-full h-[300px] sm:h-[380px]">
                   <Image
                     src={activeService.image}
                     alt={activeService.name}
@@ -184,10 +233,6 @@ export default function Services() {
                 {/* Active Service Info Banner inside Card */}
                 <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                   <div>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-xs font-semibold mb-1.5 backdrop-blur-xs">
-                      <Sparkles className="w-3 h-3 text-cyan-400" />
-                      <span>{activeService.metrics}</span>
-                    </span>
                     <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                       {activeService.name}
                     </h3>
@@ -198,10 +243,16 @@ export default function Services() {
 
                   <a
                     href="#contact"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold shadow-sm transition-all self-start sm:self-end shrink-0"
+                    className="inline-flex items-center gap-2 pl-4 pr-2.5 py-1.5 rounded-full border border-slate-700 hover:border-orange-500 text-slate-900 font-semibold text-xs hover:text-orange-600 bg-white transition-all self-start sm:self-end shrink-0 group shadow-2xs"
                   >
                     <span>Learn More</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <Image
+                      src="/logo1.png"
+                      alt="SKDM Logo"
+                      width={32}
+                      height={32}
+                      className="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-115 group-hover:rotate-6 transition-transform duration-300"
+                    />
                   </a>
                 </div>
 
@@ -211,9 +262,8 @@ export default function Services() {
 
             {/* ===================================================== */}
             {/* RIGHT COLUMN: Interactive Service Menu List           */}
-            {/* Clean daylight list with subtle dividers              */}
             {/* ===================================================== */}
-            <div className="lg:col-span-6 flex flex-col w-full divide-y divide-slate-200 pt-4 lg:pt-0">
+            <div className="lg:col-span-6 flex flex-col w-full divide-y divide-slate-200">
               
               {servicesData.map((service) => {
                 const isActive = activeServiceId === service.id;
