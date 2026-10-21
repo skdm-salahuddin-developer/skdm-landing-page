@@ -30,13 +30,13 @@ export default function Hero() {
             className="object-cover object-center"
             quality={95}
           />
-          {/* Subtle directional vignette for text readability while keeping full network clearly visible */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/50 via-50% to-transparent pointer-events-none" />
+          {/* Lighter directional vignette for much higher background image visibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/55 via-slate-950/25 via-50% to-transparent pointer-events-none" />
         </div>
 
-        {/* Content Container (Directly merged with background, no card box) */}
+        {/* Content Container (Directly merged with background, with subtle drop-shadow for high contrast) */}
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 relative z-10">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             
             {/* Simple Eyebrow Text (Real-World Style, No Capsule, No Slug in UI) */}
             <p className="text-xs sm:text-sm font-semibold tracking-wider uppercase text-orange-400 mb-3">

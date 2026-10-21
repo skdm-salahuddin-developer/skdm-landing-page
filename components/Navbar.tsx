@@ -41,7 +41,7 @@ export default function Navbar() {
             Industries
           </a>
 
-          <a href="#faq" className="hover:text-orange-500 transition-colors py-2 font-semibold text-slate-800">
+          <a href="#faq" className="hover:text-orange-500 transition-colors py-2">
             FAQ
           </a>
 
@@ -94,7 +94,7 @@ export default function Navbar() {
           <a href="#industries" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 font-medium border-b border-slate-100">
             Industries
           </a>
-          <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 font-semibold border-b border-slate-100">
+          <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 font-medium border-b border-slate-100">
             FAQ
           </a>
           <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 font-medium">

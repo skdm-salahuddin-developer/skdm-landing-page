@@ -34,3 +34,6 @@ next-env.d.ts
 
 # local utility
 proxy.js
+
+.vercel
+.env*
