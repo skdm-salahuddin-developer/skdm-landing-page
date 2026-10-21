@@ -6,6 +6,14 @@ export const metadata: Metadata = {
   title: 'Shree Krishna Digital | Digital Marketing Agency in Mumbai',
   description:
     'Full-service SEO, Google Ads, Social Media, and Web Development built to scale your business. Turning clicks into real customers & revenue.',
+  icons: {
+    icon: [
+      { url: '/logo1.png', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
+    shortcut: '/logo1.png',
+    apple: '/logo1.png',
+  },
   keywords: [
     'Shree Krishna Digital',
     'SKDM',
@@ -25,6 +33,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/logo1.png" type="image/png" sizes="any" />
+        <link rel="apple-touch-icon" href="/logo1.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
